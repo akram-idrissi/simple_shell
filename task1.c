@@ -22,7 +22,7 @@ int read_command(char **command, size_t *bufsize)
 	*bufsize = 0;
 
 	display_prompt();
-	characters_read	= getline(commande, bufsize, stdin);
+	characters_read	= getline(command, bufsize, stdin);
 	if (characters_read == -1)
 	{
 		if (feof(stdin))
@@ -54,11 +54,11 @@ void execute_command(const char *command)
 	if (pid == -1)
 	{
 		perror("fork");
-		exit(Exit_FAILURE);
+		exit(EXIT_FAILURE);
 
 	} else if (pid == 0)
 	{
-		if (execlp(command, args, NULL) == -1)
+		if (execlp(command, command, NULL) == -1)
 		{
 			perror("exec");
 			exit(EXIT_FAILURE);
