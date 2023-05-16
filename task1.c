@@ -1,4 +1,4 @@
-#include "task1.h"
+#include "tasks.h"
 
 /**
  * display_prompt - displays the shell prompt
@@ -22,7 +22,7 @@ int read_command(char **command, size_t *bufsize)
 	*bufsize = 0;
 
 	display_prompt();
-	characters_read	= getline(command, bufsize, stdin);
+	characters_read = getline(command, bufsize, stdin);
 	if (characters_read == -1)
 	{
 		if (feof(stdin))
@@ -43,54 +43,25 @@ int read_command(char **command, size_t *bufsize)
 /**
  * execute_command - Executes a command by forking a child process
  * @command: The command to execute
+ * @args: The command argument
  */
-void execute_command(const char *command)
+void execute_command(const char *command, char **args)
 {
-
-	pid_t pid;
-
-	pid = fork();
+	pid_t pid = fork();
 
 	if (pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
-
 	} else if (pid == 0)
 	{
-		if (execlp(command, command, NULL) == -1)
+		if (execvp(command, args) == -1)
 		{
-			perror("exec");
+			perror("execvp");
 			exit(EXIT_FAILURE);
 		}
 	} else
 	{
 		wait(NULL);
 	}
-}
-/**
- * main - Entry point of the shell program
- * Return: Always 0
- */
-int main(void)
-{
-	char *command = NULL;
-	size_t bufsize = 0;
-	int command_read;
-
-	while (1)
-	{
-		command_read = read_command(&command, &bufsize);
-		if (command_read == 0)
-			break;
-
-		if (access(command, X_OK) == 0)
-			execute_command(command);
-		else
-			printf("No such file or directory %s\n", command);
-	}
-
-	free(command);
-
-	return (EXIT_SUCCESS);
 }
