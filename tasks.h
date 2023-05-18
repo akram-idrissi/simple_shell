@@ -7,11 +7,20 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <limits.h>
 
-#define BUFFER_SIZE 1024
+/**
+ * struct dir_entry - representing a directory entry
+ * @dir: Pointer to a string representing the directory path
+ */
+typedef struct dir_entry
+{
+	char *dir;
+} dir_entry;
 
 void display_prompt(void);
-int parse_comand(const char *command, char **args);
 int read_command(char **command, size_t *bufsize);
+int parse_command(const char *command, char **args);
 void execute_command(const char *command, char **args);
+
 #endif
