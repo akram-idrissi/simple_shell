@@ -32,10 +32,7 @@ int main(void)
 
 		args[num_args] = NULL;
 
-		if (access(args[0], X_OK) == 0)
-			execute_command(args[0], args);
-		else
-			printf("No such file or directory: %s\n", args[0]);
+		execute_command(args[0], args);
 	}
 
 	free(command);
