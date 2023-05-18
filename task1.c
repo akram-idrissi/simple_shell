@@ -48,20 +48,43 @@ int read_command(char **command, size_t *bufsize)
 void execute_command(const char *command, char **args)
 {
 	pid_t pid = fork();
+	dir_entry dirs[] = { {"/bin"}, {"/usr/bin"}, {NULL} };
 
 	if (pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
-	} else if (pid == 0)
+	}
+	if (pid == 0)
 	{
-		if (execvp(command, args) == -1)
+		char *dir;
+		int i;
+		int num_dirs = sizeof(dirs) / sizeof(dir_entry);
+
+		if (strncmp(command, "/bin/", 5) == 0)
 		{
-			perror("execvp");
+			execv(command, args);
+			perror("execv");
 			exit(EXIT_FAILURE);
 		}
-	} else
-	{
-		wait(NULL);
+
+		for (i = 0; i < num_dirs; i++)
+		{
+			char path[PATH_MAX];
+
+			dir = dirs[i].dir;
+
+			snprintf(path, sizeof(path), "%s/%s", dir, command);
+
+			if (access(path, X_OK) == 0)
+			{
+				execv(path, args);
+				perror("execv");
+				exit(EXIT_FAILURE);
+			}
+		}
+		printf("No such file or directory: %s\n", command);
+		exit(EXIT_FAILURE);
 	}
+	wait(NULL);
 }
