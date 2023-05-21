@@ -32,6 +32,9 @@ int main(void)
 
 		args[num_args] = NULL;
 
+                if(strcmp(args[0],"exit") == 0)
+			exit_shell();
+
 		execute_command(args[0], args);
 	}
 
