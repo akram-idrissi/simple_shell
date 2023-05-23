@@ -23,5 +23,6 @@ int read_command(char **command, size_t *bufsize);
 int parse_command(const char *command, char **args);
 void execute_command(const char *command, char **args);
 void exit_shell(void);
+void print_environment(void);
 
 #endif
