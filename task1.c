@@ -28,7 +28,6 @@ int read_command(char **command, size_t *bufsize)
 		if (feof(stdin))
 		{
 			printf("\n");
-			return (0);
 		} else
 		{
 			perror("getline");
