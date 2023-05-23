@@ -34,8 +34,10 @@ int main(void)
 
 		if (strcmp(args[0], "exit") == 0)
 			exit_shell();
-
-		execute_command(args[0], args);
+		else if (strcmp(args[0], "env") == 0)
+			print_environment();
+		else
+			execute_command(args[0], args);
 	}
 
 	free(command);
